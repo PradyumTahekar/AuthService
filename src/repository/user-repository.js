@@ -25,7 +25,7 @@ class UserRepository {
             throw error;
         }
     }
-    async get(id)
+    async getById(id)
     {
         try {
             const user = await User.findByPk(id, {

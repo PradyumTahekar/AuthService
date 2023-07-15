@@ -50,7 +50,7 @@ class UserService {
         }
     }
 
-    verifyToke(token) {
+    verifyToken(token) {
         try {
             const response = jwt.verify(token, TOKEN_KEY);
             return response;
@@ -69,7 +69,29 @@ class UserService {
             throw error;
         }
     }
+
+    async isAuthenticated(token)
+    {
+        try {
+            const response = this.verifyToken(token);
+            if(!response)
+            {
+                throw {error: "invalid token"};
+            }
+            const user = this.userRepository.getById(response.id);
+            if(!user)
+            {
+                throw {error: "no user with the corresponding token exists"};
+            }
+            return user.id;
+        } catch (error) {
+            console.log("Something went wrong in password comparison", error);
+            throw error;
+        }
+    }
 }
+
+
 
 module.exports = UserService;
 
